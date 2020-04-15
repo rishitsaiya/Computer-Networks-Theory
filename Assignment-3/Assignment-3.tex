@@ -1,0 +1,437 @@
+\title{Computer Networks - CS 204} % You may change the title if you want.
+
+\author{Rishit Saiya - 180010027, Assignment - 3 }
+
+\date{\today}
+
+\documentclass[12pt]{article}
+\usepackage{fullpage}
+\usepackage{enumitem}
+\usepackage{amsmath,mathtools}
+\usepackage{amssymb}
+\usepackage[super]{nth}
+\usepackage{textcomp}
+\usepackage{hyperref}
+\usepackage[normalem]{ulem}
+\useunder{\uline}{\ul}{}
+\begin{document}
+\maketitle
+
+\section{IP Address and CIDR}
+\begin{enumerate}
+    \item For class C address, size of network field is 24 bits, the total number of networks possible is $2^{21}$.
+    
+    \item The network 198.78.41.0 is a Class C network.
+    
+    \item In a classful addressing, first three bits in Class C IP address are  110.
+    
+    \item Given n as the number of bits in the host ID, the number of addresses usable for addressing specific host in each network is $2^{n}-2$. Those 2 are reserved hosts, 0.0.0.0 $\And$ 255.255.255.255 and aren't used in the network. \\
+    After converting the subnet mask to binary, i.e. 11111111.11111111.11111000.00000000, we see that here the n is 11, hence the maximum number of hosts for a subnet is 2046.
+    
+    \item Given the subnet, a set of IP addresses belong to same network if and only if their bit wise AND operation with the given subnet computes to same Subnet ID. \\
+    Since the subnet is 255.255.31.0 and its binary is 11111111.11111111.00011111.00000000, so AND operation with first 12 bits of Subnet and any IP address would obviously yield the same bits of the IP address. So option A and C are eliminated.
+    When we check for the remaining 2 options by AND operation, we obtain the following result: \\
+    (10.35.28.2) AND (255.255.31.0) = 10.35.28.0 \\ 
+    (10.35.29.4) AND (255.255.31.0) = 10.35.29.0 \\
+    This concludes that they don't belong to same network. We check for last remaining option. \\
+    (128.8.129.43) AND (255.255.31.0) = 128.8.1.0 \\
+    (128.8.161.55) AND (255.255.31.0) = 128.8.1.0 \\
+    Hence they belong to the same network.
+    
+    \item The given IP address is 125.134.112.66 and corresponding Subnet is 255.255.224.0, the Network ID is \\
+    (125.134.112.66) AND (255.255.224.0) = 125.134.96.0 \\
+    The network address is 125.134.96.0.
+    
+    \item The network ID for the IP address (172.16.0.0) and Subnet (255.255.0.0) is \\
+    (172.16.0.0) AND (255.255.0.0) = 172.16.0.0\\
+    Putting 1 in all host ID, will give us Broadcast address of the given IP address. The Network ID is 10101100.00010000.00000000.00000000, so the broadcast address is 10101100.00010000.11111111.11111111 which is equivalent to 172.16.255.255.
+
+\section{Distance Vector Routing and Link State Routing}
+    
+    \item Initial Routing Tables are as follows: \\
+
+\textit{\textbf{Routing Table A: Mentioned as in Table 1}} \\
+
+\begin{table}[]
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+Destination & \begin{tabular}[c]{@{}c@{}}Distance Value\\ (which is the link cost value)\end{tabular} & Next Hop \\ \hline
+A           & 0                                                                                       & A        \\ \hline
+B           & 4                                                                                       & B        \\ \hline
+C           & $\infty$                                                                                     & -         \\ \hline
+D           & $\infty$                                                                                     & -         \\ \hline
+E           & $\infty$                                                                                     & -         \\ \hline
+\end{tabular}
+\caption{Routing Table A (Initial)}
+\end{center}
+\end{table}
+
+\textit{\textbf{Routing Table B: Mentioned as in Table 2}} \\
+
+\begin{table}[]
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+Destination & \begin{tabular}[c]{@{}c@{}}Distance Value\\ (which is the link cost value)\end{tabular} & Next Hop \\ \hline
+A           & 4                                                                                       & A        \\ \hline
+B           & 0                                                                                       & B        \\ \hline
+C           & 1                                                                                       & C        \\ \hline
+D           & $\infty$                                                                                     & -        \\ \hline
+E           & 5                                                                                       & E        \\ \hline
+\end{tabular}
+\caption{Routing Table B (Initial)}
+\end{center}
+\end{table}
+
+\textit{\textbf{Routing Table C: Mentioned as in Table 3}} \\
+
+\begin{table}[]
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+Destination & \begin{tabular}[c]{@{}c@{}}Distance Value\\ (which is the link cost value)\end{tabular} & Next Hop \\ \hline
+A           & $\infty$                                                                                       & -        \\ \hline
+B           & 1                                                                                       & B        \\ \hline
+C           & 0                                                                                       & C        \\ \hline
+D           & 7                                                                                     & D        \\ \hline
+E           & $\infty$                                                                                       & -        \\ \hline
+\end{tabular}
+\caption{Routing Table C (Initial)}
+\end{center}
+\end{table}
+
+\textit{\textbf{Routing Table D: Mentioned as in Table 4}} \\
+
+\begin{table}[]
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+Destination & \begin{tabular}[c]{@{}c@{}}Distance Value\\ (which is the link cost value)\end{tabular} & Next Hop \\ \hline
+A           & $\infty$                                                                                       & -        \\ \hline
+B           & $\infty$                                                                                       & -        \\ \hline
+C           & 7                                                                                       & C        \\ \hline
+D           & 0                                                                                     & D        \\ \hline
+E           & 2                                                                                       & E        \\ \hline
+\end{tabular}
+\caption{Routing Table D (Initial)}
+\end{center}
+\end{table}
+
+\textit{\textbf{Routing Table E: Mentioned as in Table 5}} \\
+
+\begin{table}[]
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+Destination & \begin{tabular}[c]{@{}c@{}}Distance Value\\ (which is the link cost value)\end{tabular} & Next Hop \\ \hline
+A           & $\infty$                                                                                       & -        \\ \hline
+B           & 5                                                                                       & B        \\ \hline
+C           & $\infty$                                                                                       & -        \\ \hline
+D           & 2                                                                                     & D        \\ \hline
+E           & 0                                                                                       & E        \\ \hline
+\end{tabular}
+\caption{Routing Table E (Initial)}
+\end{center}
+\end{table}
+%--------------------------------------------------------
+\textbf{After $1^{st}$ Iteration the following are the routing tables of the routers:} \\
+
+\textit{\textbf{Routing Table A: Mentioned as in Table 6}} \\
+
+\begin{table}[]
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+Destination & \begin{tabular}[c]{@{}c@{}}Distance Value\\ (which is the link cost value)\end{tabular} & Next Hop \\ \hline
+A           & 0                                                                                       & A        \\ \hline
+B           & 4                                                                                       & B        \\ \hline
+C           & $\infty$                                                                                     & -         \\ \hline
+D           & $\infty$                                                                                     & -         \\ \hline
+E           & $\infty$                                                                                     & -         \\ \hline
+\end{tabular}
+\caption{Routing Table A ($1^{st}$ Iteration)}
+\end{center}
+\end{table}
+
+\textit{\textbf{Routing Table B: Mentioned as in Table 7}} \\
+
+\begin{table}[]
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+Destination & \begin{tabular}[c]{@{}c@{}}Distance Value\\ (which is the link cost value)\end{tabular} & Next Hop \\ \hline
+A           & 4                                                                                       & A        \\ \hline
+B           & 0                                                                                       & B        \\ \hline
+C           & 1                                                                                     & C         \\ \hline
+D           & 7                                                                                     & E         \\ \hline
+E           & 5                                                                                     & E         \\ \hline
+\end{tabular}
+\caption{Routing Table B ($1^{st}$ Iteration)}
+\end{center}
+\end{table}
+
+\textit{\textbf{Routing Table C: Mentioned as in Table 8}} \\
+
+\begin{table}[]
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+Destination & \begin{tabular}[c]{@{}c@{}}Distance Value\\ (which is the link cost value)\end{tabular} & Next Hop \\ \hline
+A           & 5                                                                                       & B        \\ \hline
+B           & 1                                                                                       & B        \\ \hline
+C           & 0                                                                                     & C         \\ \hline
+D           & 7                                                                                     & D         \\ \hline
+E           & 6                                                                                     & B         \\ \hline
+\end{tabular}
+\caption{Routing Table C ($1^{st}$ Iteration)}
+\end{center}
+\end{table}
+
+\textit{\textbf{Routing Table D: Mentioned as in Table 9}} \\
+
+\begin{table}[]
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+Destination & \begin{tabular}[c]{@{}c@{}}Distance Value\\ (which is the link cost value)\end{tabular} & Next Hop \\ \hline
+A           & $\infty$                                                                                       & -        \\ \hline
+B           & 7                                                                                       & E        \\ \hline
+C           & 7                                                                                     & C         \\ \hline
+D           & 0                                                                                     & D         \\ \hline
+E           & 2                                                                                     & E         \\ \hline
+\end{tabular}
+\caption{Routing Table D ($1^{st}$ Iteration)}
+\end{center}
+\end{table}
+
+\textit{\textbf{Routing Table E: Mentioned as in Table 10}} \\
+
+\begin{table}[]
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+Destination & \begin{tabular}[c]{@{}c@{}}Distance Value\\ (which is the link cost value)\end{tabular} & Next Hop \\ \hline
+A           & 9                                                                                       & B        \\ \hline
+B           & 5                                                                                       & B        \\ \hline
+C           & 6                                                                                     & B         \\ \hline
+D           & 2                                                                                     & D         \\ \hline
+E           & 0                                                                                     & E         \\ \hline
+\end{tabular}
+\caption{Routing Table E ($1^{st}$ Iteration)}
+\end{center}
+\end{table}
+%--------------------------------------------------------------
+\textbf{After $2^{nd}$ Iteration the following are the routing tables of the routers:} \\
+
+\textit{\textbf{Routing Table A: Mentioned as in Table 11}} \\
+
+\begin{table}[]
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+Destination & \begin{tabular}[c]{@{}c@{}}Distance Value\\ (which is the link cost value)\end{tabular} & Next Hop \\ \hline
+A           & 0                                                                                       & A        \\ \hline
+B           & 4                                                                                       & B        \\ \hline
+C           & 5                                                                                     & B         \\ \hline
+D           & 11                                                                                     & B         \\ \hline
+E           & 9                                                                                     & B         \\ \hline
+\end{tabular}
+\caption{Routing Table A ($2^{nd}$ Iteration)}
+\end{center}
+\end{table}
+
+\textit{\textbf{Routing Table B: Mentioned as in Table 12}} \\
+
+\begin{table}[]
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+Destination & \begin{tabular}[c]{@{}c@{}}Distance Value\\ (which is the link cost value)\end{tabular} & Next Hop \\ \hline
+A           & 4                                                                                       & A        \\ \hline
+B           & 0                                                                                       & B        \\ \hline
+C           & 1                                                                                     & C         \\ \hline
+D           & 7                                                                                     & E         \\ \hline
+E           & 5                                                                                     & E         \\ \hline
+\end{tabular}
+\caption{Routing Table B ($2^{nd}$ Iteration)}
+\end{center}
+\end{table}
+
+\textit{\textbf{Routing Table C: Mentioned as in Table 13}} \\
+
+\begin{table}[]
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+Destination & \begin{tabular}[c]{@{}c@{}}Distance Value\\ (which is the link cost value)\end{tabular} & Next Hop \\ \hline
+A           & 5                                                                                       & B        \\ \hline
+B           & 1                                                                                       & B        \\ \hline
+C           & 0                                                                                     & C         \\ \hline
+D           & 7                                                                                     & D         \\ \hline
+E           & 6                                                                                     & B         \\ \hline
+\end{tabular}
+\caption{Routing Table C ($2^{nd}$ Iteration)}
+\end{center}
+\end{table}
+
+\textit{\textbf{Routing Table D: Mentioned as in Table 14}} \\
+
+\begin{table}[]
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+Destination & \begin{tabular}[c]{@{}c@{}}Distance Value\\ (which is the link cost value)\end{tabular} & Next Hop \\ \hline
+A           & 11                                                                                       & E        \\ \hline
+B           & 7                                                                                       & E        \\ \hline
+C           & 7                                                                                     & C         \\ \hline
+D           & 0                                                                                     & D         \\ \hline
+E           & 2                                                                                     & E         \\ \hline
+\end{tabular}
+\caption{Routing Table D ($2^{nd}$ Iteration)}
+\end{center}
+\end{table}
+
+\textit{\textbf{Routing Table E: Mentioned as in Table 15}} \\
+
+\begin{table}[]
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+Destination & \begin{tabular}[c]{@{}c@{}}Distance Value\\ (which is the link cost value)\end{tabular} & Next Hop \\ \hline
+A           & 9                                                                                       & B        \\ \hline
+B           & 5                                                                                       & B        \\ \hline
+C           & 6                                                                                     & B         \\ \hline
+D           & 2                                                                                     & D         \\ \hline
+E           & 0                                                                                     & E         \\ \hline
+\end{tabular}
+\caption{Routing Table E ($2^{nd}$ Iteration)}
+\end{center}
+\end{table}
+%-------------------------------------------------------------
+
+For the rest of the iterations, we observe that the iteration tables remain same and hence the convergence is achieved.
+
+\textbf{Shortest Path between every pair of nodes is as follows:} \\
+
+\textit{\textbf{Router A: Mentioned as in Table 16}} \\
+
+\begin{table}[]
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+Destination & Shortest Path                                     \\ \hline
+B           & A $\rightarrow$ B                                 \\ \hline
+C           & A $\rightarrow$ B $\rightarrow$ C                 \\ \hline
+D           & A $\rightarrow$ B $\rightarrow$ E $\rightarrow$ D \\ \hline
+E           & A $\rightarrow$ B $\rightarrow$ E                 \\ \hline
+\end{tabular}
+\caption{Router A (Shortest Path)}
+\end{center}
+\end{table}
+
+\textit{\textbf{Router B: Mentioned as in Table 17}} \\
+
+\begin{table}[]
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+Destination & Shortest Path                                     \\ \hline
+A           & B $\rightarrow$ A                                 \\ \hline
+C           & B $\rightarrow$ C                 \\ \hline
+D           & B $\rightarrow$ E $\rightarrow$ D \\ \hline
+E           & B $\rightarrow$ E                 \\ \hline
+\end{tabular}
+\caption{Router B (Shortest Path)}
+\end{center}
+\end{table}
+
+\textit{\textbf{Router C: Mentioned as in Table 18}} \\
+
+\begin{table}[]
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+Destination & Shortest Path                                     \\ \hline
+A           & C $\rightarrow$ B $\rightarrow$ A                                 \\ \hline
+B           & C $\rightarrow$ B                 \\ \hline
+D           & C $\rightarrow$ D \\ \hline
+E           & C $\rightarrow$ B $\rightarrow$ E                 \\ \hline
+\end{tabular}
+\caption{Router C (Shortest Path)}
+\end{center}
+\end{table}
+
+\textit{\textbf{Router D: Mentioned as in Table 19}} \\
+
+\begin{table}[]
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+Destination & Shortest Path                                     \\ \hline
+A           & D $\rightarrow$ E $\rightarrow$ B $\rightarrow$ A                                 \\ \hline
+B           & D $\rightarrow$ E $\rightarrow$ B                 \\ \hline
+C           & D $\rightarrow$ C \\ \hline
+E           & D $\rightarrow$ E                 \\ \hline
+\end{tabular}
+\caption{Router D (Shortest Path)}
+\end{center}
+\end{table}
+
+\textit{\textbf{Router E: Mentioned as in Table 20}} \\
+
+\begin{table}[]
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+Destination & Shortest Path                                     \\ \hline
+A           & E $\rightarrow$ B $\rightarrow$ A                                 \\ \hline
+B           & E $\rightarrow$ B                 \\ \hline
+C           & E $\rightarrow$ B $\rightarrow$ C \\ \hline
+E           & E $\rightarrow$ D                 \\ \hline
+\end{tabular}
+\caption{Router E (Shortest Path)}
+\end{center}
+\end{table}
+%====================================================================    
+    \item \begin{enumerate}[label=(\arabic*)]
+        \item \begin{enumerate}[label=(\alph*)]
+            \item A $\rightarrow$ B $\rightarrow$ C $\rightarrow$ E
+            \item A $\rightarrow$ B $\rightarrow$ D
+        \end{enumerate}
+        \item Vertex A is considered as the source vertex throughout the whole process of finding the shortest path.
+ 
+ The implementation of Dijkstra's Algorithm is given in \textbf{Table 21}. The explanation is as follows: \\
+ Each row in the table is an iteration of the vertex. As mentioned, A is the source vertex. Direct edges to B $\And$ C exist in the graph. So correspondingly, 5 $\And$ 10 are marked. Rest are marked $\infty$. For each iteration, we have to choose the vertex possessing the shortest distance from the previous selected vertex. In here, for the $1^{st}$ Iteration, out of \{5,10,$\infty$,$\infty$\}, 5 is minimum, so it underlined and corresponding B is selected as the selected vertex for the next iteration. \\
+ 
+ In the next iteration, we iteratively use dist[v] $\leftarrow$ dist[u] + w(u,v) for every neighbour and if dist[v] $>$ dist[u] + w(u,v), all notations being standard. So in here, B to D, we replace $\infty$ by (5 + 2). Similarly E is filled by (9 + 5). \\
+ 
+ These iterations carried on till we get the whole row underlined, in which case we understand that we have done the iterations on all the vertices. \\
+ 
+ The final thing obtained is shortest distances from A to other vertices. Just tracing back the path, on where the shortest distances were changing will give us the Shortest Path. \\
+ 
+ \textbf{Time Complexity:} \\
+ Here V $\And$ E are number of vertices and edges respectively.
+ The time complexity of Dijkstra's Algorithm is O($V^2$). But when we implement it using the minimum priority queue, we reduce the complexity to O((E + V)$\times$log(V)). Also if we implement using Fibonacci Heap for Priority Queue, we can further decrease it to O(E + ($V \times logV$)).
+ 
+ \begin{table}[]
+ \begin{center}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+Selected Vertex & B                & C                & D                & E                \\ \hline
+A (Source)              & {\ul \textbf{5}} & 10               & $\infty$         & $\infty$         \\ \hline
+B               & {\ul \textbf{5}} & 8                & {\ul \textbf{7}} & 14               \\ \hline
+D               & {\ul \textbf{5}} & {\ul \textbf{8}} & {\ul \textbf{7}} & 13               \\ \hline
+C               & {\ul \textbf{5}} & {\ul \textbf{8}} & {\ul \textbf{7}} & {\ul \textbf{9}} \\ \hline
+E               & {\ul \textbf{5}} & {\ul \textbf{8}} & {\ul \textbf{7}} & {\ul \textbf{9}} \\ \hline
+\end{tabular}
+\caption{Implementation of Dijkstra's Algorithm}
+\end{center}
+\end{table}
+
+
+
+    \end{enumerate}
+    
+\end{enumerate}
+\end{document}
