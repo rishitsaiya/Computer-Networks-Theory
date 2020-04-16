@@ -1,0 +1,130 @@
+\title{Computer Networks - CS 204} % You may change the title if you want.
+
+\author{Rishit Saiya - 180010027, Summary - 1}
+
+\date{\today}
+
+\documentclass[12pt]{article}
+\usepackage{fullpage}
+\usepackage{enumitem}
+\usepackage{amsmath,mathtools}
+\usepackage{amssymb}
+\usepackage[super]{nth}
+\usepackage{textcomp}
+\usepackage{hyperref}
+\begin{document}
+\maketitle
+
+\section{Network Layer}
+    The layer which ensures the end to end transmission and also facilitates in selecting a particular path for best optimum transmission.
+
+\section{Internet Service Provider (ISP)}
+    An autonomous system which provides Internet connectivity to another group of autonomous systems or end users.
+
+\section{Internet Exchange Point (IXP)}
+    An Internet exchange point (IX or IXP) is the physical infrastructure through which Internet service providers (ISPs) and content delivery networks (CDNs) exchange Internet traffic between their autonomous systems. Such an IXP is the Trans Atlantic Ocean Lines, where the networks inter change among the continents. \\
+    
+    The chronology of packet transmission from one host to another host (across the topological networks) is as follows:
+    
+    Host-1 $\rightarrow$ Local ISP $\rightarrow$ Regional ISP $\rightarrow$ National ISP $\rightarrow$ Transit ISP $\rightarrow$ National ISP $\rightarrow$ Regional ISP $\rightarrow$ Local ISP $\rightarrow$ Host-2
+    
+\section{IP Address}
+    An address is required which identifies a network as well as the host which is residing under the network. Such an address is the IP address.        
+\section{Classful IP Addressing}
+
+An IP address is designed with 32 bits, grouped with 8 bits each. An IP address has an address space of $2^{32}$.
+
+The 32 bit IP address is divided into five sub-classes namely A, B, C, D, E.
+
+The version 4 of IP address IPv4 is divided into two parts:
+\begin{itemize}
+    \item Network ID \\
+        It is used to identify the network.
+    \item Host ID \\
+        It is used to identify the host.
+\end{itemize}
+
+The classwise distribution of an IP Address is clearly mentioned in the Table 1.
+\begin{table}[]
+\begin{center}
+\begin{tabular}{cccc}
+\hline
+\multicolumn{1}{|c|}{\textbf{Class}} & \multicolumn{1}{c|}{\textbf{First Bits}} & \multicolumn{1}{c|}{\textbf{Network ID (in bits)}} & \multicolumn{1}{c|}{\textbf{Host ID (in bits)}} \\ \hline
+\multicolumn{1}{|c|}{A}              & \multicolumn{1}{c|}{0}                   & \multicolumn{1}{c|}{8}                             & \multicolumn{1}{c|}{24}                         \\ \hline
+\multicolumn{1}{|c|}{B}              & \multicolumn{1}{c|}{10}                  & \multicolumn{1}{c|}{16}                            & \multicolumn{1}{c|}{16}                          \\ \hline
+\multicolumn{1}{|c|}{C}              & \multicolumn{1}{c|}{110}                 & \multicolumn{1}{c|}{24}                            & \multicolumn{1}{c|}{8}                          \\ \hline
+\multicolumn{1}{|c|}{D}              & \multicolumn{1}{c|}{1110}                & \multicolumn{2}{c|}{Multicast Address}                                                               \\ \hline
+\multicolumn{1}{|c|}{E}              & \multicolumn{1}{c|}{1111}                & \multicolumn{2}{c|}{Reserved for future uses}                                                        \\ \hline
+\multicolumn{1}{l}{}                 & \multicolumn{1}{l}{}                     & \multicolumn{1}{l}{}                               & \multicolumn{1}{l}{}                            \\
+\multicolumn{1}{l}{}                 & \multicolumn{1}{l}{}                     & \multicolumn{1}{l}{}                               & \multicolumn{1}{l}{}                           
+\end{tabular}
+\caption{Classful IP Addressing}
+\end{center}
+\end{table} \\
+
+\textbf{Multicast Addressing:}
+    When we want to send the packets to not a single destination but multiple destination, we use multicast addressing for this purpose. \\
+
+The following part explains about the Network Address and Broadcast Address
+% \textbf{Network Address $\And$ Broadcast Address:}
+\begin{enumerate}
+    \item \textbf{Network Address} \\
+        The address constituted by putting all 0's in the host address part. \\
+        For example - Class A : 126.0.0.0 $\And$ Class B : 189.233.0.0
+    \item \textbf{Broadcast Address} \\
+        The address constituted by putting all 1's in the host address part. \\
+        For example - Class A : 126.255.255.255 $\And$ Class B : 189.233.255.255
+\end{enumerate}
+
+\section{Classless Inter Domain Routing (CIDR)}
+
+With the motivation of using the address space efficiently, this routing technique was designed. \\
+Basically we split a group of large networks or combine multiple small networks for efficient use of address spaces.
+
+\begin{enumerate}
+    \item \textbf{Subnetting} \\
+        The process of dividing large network into smaller networks is defined as Subnetting.
+        
+        \textbf{Subnet Mask:} \\
+        It denotes the number of bits in the network address field. For different classes, the value is different. Its importance is to determine class boundary where the class is the which the IP address belongs to.\\
+        Class A - 8 \\
+        Class B - 16 \\
+        Class C - 24 \\
+        
+    \item \textbf{Supernetting} \\
+        The process of combining/merging small networks into a larger network is defined as Supernetting.
+\end{enumerate}
+
+\section{Upper and Lower Limit of IP Address Classes}
+The limits of IP address in each class is defined here:
+\begin{itemize}
+    \item Class A limits : [1,128]
+    \item Class B limits : [129,191]
+    \item Class C limits : [293,223]
+    \item Class D limits : [224,239]
+    \item Class E limits : [240,247]
+\end{itemize}
+To understand the process of creation of these ranges, for an example, Class A ranges have been proved below. \\
+We know that selecting the number of bits in Network ID will fix the number of bits in Host ID, 32 bits being fixed bits in an IP address.
+So now, there are 8 bits associated to the Network ID in Class A and of which First Bits fixed is 0 (reference to Table 1). \\
+Consider the 8 bits as \_ \_ \_ \_ \_ \_ \_ \_. This is now \underline{0} \_ \_ \_ \_ \_ \_ in class A. So other blanks can be either 0 or 1. Hence $2^{7}$ possible range starting from 1 (Not selected 0 because of reason explained in below section). Hence the range of Class A becomes [1,128].
+
+\section{Range of IP Addresses in each Class}
+The range of IP address in each class is defined here:
+\begin{itemize}
+    \item Class A range : 1.X.X.X - 126.X.X.X
+    \item Class B range : 127.0.X.X - 191.255.X.X
+    \item Class C range : 192.0.0.X - 233.255.255.X
+    \item Class D range : 224.0.0.0 - 239.255.255.255
+\end{itemize}
+
+\section{All 0's and 1's in IP Address Problem}
+All the 0's cannot be used in the IP address because it will point to the same original network address irrespective of it's residence in different network. 
+
+\textbf{\textit{For example:}} Consider the IP address 192.168.0.0/16 in CIDR notation. And now consider the IP address 192.168.0XXXXXXX.XXXXXXXX/17 in CIDR notation. Now consider the case where all the X = 0, then both the IP address will have same network address.
+
+On the similar lines, All the 1's cannot be used in the IP address because it will point to the same Broadcast Address irrespective of network it belongs to.
+
+\textit{\textbf{For example:}} Consider the IP address 192.168.255.0/16 in CIDR notation. And now consider the IP address 192.168.1XXXXXXX.XXXXXXXX/17 in CIDR notation. Now consider the case where all the X = 1, then both the IP address will have same broadcast address.
+
+\end{document}
