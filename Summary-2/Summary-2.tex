@@ -1,0 +1,196 @@
+\title{Computer Networks - CS 204} % You may change the title if you want.
+
+\author{Rishit Saiya - 180010027, Summary - 2 }
+
+\date{\today}
+
+\documentclass[12pt]{article}
+\usepackage{fullpage}
+\usepackage{enumitem}
+\usepackage{amsmath,mathtools}
+\usepackage{amssymb}
+\usepackage[super]{nth}
+\usepackage{textcomp}
+\usepackage{hyperref}
+\usepackage{listings}
+\begin{document}
+\maketitle
+
+\section{Designing Routing Algorithms}
+
+\begin{enumerate}[label=(\alph*)]
+    \item \textbf{Desirable Properties}
+    \begin{itemize}
+        \item Correctness and Simplicity \\
+            Self Explanatory
+        \item Robustness \\
+            The ability of network to deliver packets via some route even in the face of failures.
+        \item Stability \\
+            The algorithm should converge to equilibrium fast in the face of changing conditions in the network.
+        \item Fairness and Optimality \\
+            It is obvious requirement but quite conflicting sometimes.
+        \item Efficiency \\
+            Minimum load/overhead.
+    \end{itemize}
+    
+    \item \textbf{Design Parameters}
+    \begin{itemize}
+        \item Performance Criteria \\
+            The number of hops, number of lost packets, delay, Throughput.
+        \item Decision Time \\
+            Decision time for each packet, per session in a virtual circuit.
+        \item Decision Place \\
+            Decision Place at each node, central node, originated node.
+        \item Network Information Source \\
+            Source might be none, local, adjacent node, nodes along route, all nodes.
+        \item Network Information Update Timing \\
+            Continuous, Periodic, Major load Change, Topology Change.
+    \end{itemize}
+\end{enumerate}
+
+\section{Strategies to design Routing Algorithms}
+
+\begin{enumerate}[label=(\alph*)]
+    \item Fixed Routing
+    \item Flooding Routing
+    \item Random Routing
+    \item Flow Based Routing
+    \item Adaptive Routing
+    \begin{itemize}
+        \item Distance Vector Routing
+        \item Link State Routing
+    \end{itemize}
+    \item Multicast Routing
+\end{enumerate}
+
+\section{Distance Vector Routing Algorithm}
+The key characteristics are:
+\begin{itemize}
+    \item Knowledge about entire network.
+    \item Routing only to neighbours.
+    \item Information sharing at regular intervals.
+\end{itemize}
+
+Each node is maintains a routing table with all its neighbour entries. It is a dynamic algorithm. It is mainly used in ARPANET and
+RIP. The main algorithm which is used here for routing is \textit{\textbf{Bellman Ford Algorithm}}. Each router maintains a distance table known as Vector.
+
+\section{Bellman Ford Algorithm}
+    $d_x(y)$ := Cost of least-cost path from x to y \\
+    $d_x(y)$ := $min_v$ \{c(x,v) + $d_v(y)$\} \\
+    c(x,v) := Cost to neighbor v \\
+    $D_x(y)$ = Estimate of least cost from x to y \\
+    
+\textit{\textbf{Algorithm}} \\
+
+At each node x, \\
+\textbf{Initialization:} \\
+for all destinations y in N: \\
+$D_x(y)$ = c(x,y) // If y is not a neighbor then c(x,y) = $\infty$ \\
+% for each neighbor w \\
+% $D_w(y)$ = ? for all destination y in N. \\
+for each neighbor w \\
+send distance vector $D_x(y)$= [ $D_x$ : y in N ] to w \\
+\textbf{loop} \\
+wait(until I receive any distance vector from some neighbor w) \\
+for each y in N: \\
+$D_x(y)$ = $min_v$ \{c(x,v)+$D_v(y)$\} \\
+If $D_x(y)$ is changed for any destination y \\
+Send distance vector $D_x$ = [ $D_x(y)$ : y in N ] to all neighbors. \\
+\textbf{forever}
+
+
+\section{Link State Routing}
+    The basic steps involved here are:
+    \begin{itemize}
+        \item Identifying the neighbouring nodes.
+        \item Measure the delay/cost to each of its neighbours.
+        \item Form a packet containing all information.
+        \item Send packet to all other nodes [Basic reference to Flooding].
+        \item Compute the shortest path to every other node by Dijkstra's Algorithm.
+    \end{itemize}
+    
+\section{Dijkstra's Algorithm}
+
+\textbf{N:} It is the total number of nodes available in the network. \\
+\textbf{D(v):} It defines the cost of the path from source code to
+destination v that has the least cost currently. \\
+\textbf{c(i, j):} Link cost from node i to node j. If i and j nodes are not
+directly linked, then c(i, j) = $\infty$.
+
+\textit{\textbf{Algorithm}} \\
+
+\textbf{Initialization} \\
+N = \{A\} // A is a root node. \\
+for all nodes v \\
+if v adjacent to A \\
+then D(v) = c(A,v) \\
+else D(v) = $\infty$ \\
+\textbf{loop} \\
+find w not in N such that D(w) is a minimum. \\
+Add w to N \\
+Update D(v) for all v adjacent to w and not in N: \\
+D(v) = min(D(v) , D(w) + c(w,v)) \\
+\textbf{Until all nodes in N} \\
+
+\textbf{Algorithm Complexity:} O($n^2$). Better Implementation possible of O(nlogn).
+
+\section{Solving Count to Infinity Problem}
+\begin{itemize}
+    \item \textbf{Split Horizon:} A router needs to wait for a timeout to remove an entry from a routing table.
+    \item \textbf{Poisson Reverse:} Routes are immediately removed when they
+are marked as unreachable from all the routing updates from all the neighbors.
+\end{itemize}
+These solutions are used in practice, since they adds up cost (increases the size of the route updates).
+
+\section{Random Routing}
+The important points here are:
+\begin{itemize}
+    \item Its Simplicity $\And$ Robustness of flooding with far less traffic load.
+    \item A node selects only 1 outgoing path for retransmission of an incoming packet.
+    \item The outgoing link is chosen at random, excluding the link on which the packet arrived.
+\end{itemize}
+A change or betterment is to assign a probability to each outgoing link and to select the link based on that probability.
+Mathematically, we explain it as follows:
+    \begin{equation*}
+        P_{i} = \frac{r_{i}}{\sum_{1}^{n-1}r_{i}}
+    \end{equation*}
+It will not be a least-cost route and network and will carry higher than optimum traffic load. 
+
+\section{Flow Based Routing}
+The important thing to ponder here are:
+\begin{itemize}
+    \item This approach is such that it used both topology and load information for routing.
+    \item The flow between the pair of nodes is stable.
+\end{itemize}
+
+For a given line of transmission if the capacity and given the average flow, Mean Packet Delay (MPD) is calculated using the Queuing Theory. Mean Packet Delay is further computed to Flow Weighted Average (FWA) which is basically mean delay for the whole subnet.
+
+The routing algorithm finds the path of minimum average delay which is a fixed value for a subnet.
+
+\section{Fixed Routing}
+The important thing to ponder here are:
+\begin{itemize}
+    \item The fixed route is selected for each source and destination pair of nodes.
+    \item Routes are fixed. Only changes in topology will lead to change in routes.
+\end{itemize}
+A central routing matrix is created based on least cost path which is stored at a network control center.
+
+The least cost path is a selected path such that a cost associated with minimum hops. Dijkstra's Algorithm or Bellman Ford Algorithm could work here.
+
+\section{Flooding}
+The main points here are:
+\begin{itemize}
+    \item It requires no network information whatsoever.
+    \item Every incoming packet to a node is sent out on every outgoing line except the one it arrived on.
+\end{itemize}
+All the possible routes from source to destination is considered. If a path exists, packets surely reaches the destination. At least one packet, passes through shortest path.
+
+However to avoid congestion in flooding, we have techniques as follows:
+\begin{itemize}
+    \item Hop Count Technique \\
+        A hop count is maintained in packet header. It is initialized with diameter of subnet in general which in turn decreases by 1 at each hop. \\
+        By keeping a track of packets which are responsible for flooding using sequence number and avoiding sending them out $2^{nd}$ time.
+    \item Selective Flooding \\
+        This is used more in practice. The routers send every incoming packet out on every line, only on those lines that go in approximately in direction of destination. 
+\end{itemize}
+\end{document}
