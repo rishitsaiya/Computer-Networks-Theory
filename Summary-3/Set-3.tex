@@ -1,0 +1,99 @@
+\title{Computer Networks - CS 204} % You may change the title if you want.
+
+\author{Rishit Saiya - 180010027, Summary}
+
+\date{\today}
+
+\documentclass[12pt]{article}
+\usepackage{fullpage}
+\usepackage{enumitem}
+\usepackage{amsmath,mathtools}
+\usepackage{amssymb}
+\usepackage[super]{nth}
+\usepackage{textcomp}
+\usepackage{hyperref}
+\usepackage{soul}
+\begin{document}
+\maketitle
+
+%-------------------------------------------------------------------------
+
+\section{Data Error}
+    Transmitted data over a cable/channel always has a chance that some of the bits will be changed/flipped (0 to 1 or 1 to 0) due to noise, signal distortions, attenuation or intrusion into the network by an outsider. \\
+    
+    \textbf{Random Errors} change the bits in an unpredictable fashion. Each bit has a certain probability of being changed. These errors are in general due to the thermal noise, exhaustion in servers, etc. \\
+    
+    \textbf{Burst Errors} change a certain segment of bits in succession. They are often caused due to faulty registers in the electrical components, etc.
+
+%-------------------------------------------------------------------------
+
+\section{Error Detection}
+The error in transmission are inevitable and result in changes in one or more bits in a transmitted frame.
+
+Some of the notations we use here are as follows:
+\begin{itemize}
+    \item F : The number of bits in the frame.
+    \item {$p_b$} : It denotes the probability of a single bit error, which is called as \textit{Bit Error Rate}.
+    \item {$p_1$} : It is the probability that a frame arrives with no bit errors in it.
+    \item {$p_2$} : It is the probability that a frame arrives with one or more undetected bit errors.
+    \item {$p_3$} : It is the probability that a frame arrives with one or more detected bit errors but no undetected bit errors.
+\end{itemize}
+    
+    If no Error Detection scheme is used, we can conclude the following:
+    \begin{equation*}
+        p_1 = (1 - p_b)^F
+    \end{equation*}
+    \begin{equation*}
+        p_2 = 1 - p_1
+    \end{equation*}
+    \begin{equation*}
+        p_3 = 0
+    \end{equation*}
+
+WLOG, we can say that higher the length of the frame i.e., higher F, results in high $p_b$ and low $p_1$ and higher $p_2$.
+
+Error detection is not 100\% reliable. The protocols may miss some errors but rarely though. Larger the error detection and correction bits redundancy will yield better results and detection.
+
+%-------------------------------------------------------------------------   
+
+\subsection{Hamming Distance}
+
+The Hamming Distance is calculated for 2 bit patterns. The Hamming Distance H is the number of positions where the two bit patterns differ. Those positions are calculated by checking the positions of 1s when we XOR the two bit patterns.
+
+\textbf{For example:} Consider 2 bit patterns: 11010, 01011. \\
+    The resulting hamming code when we XOR the above 2 codes are:
+    \begin{center}
+        (11010) XOR (01011) = 10001
+    \end{center}
+Since there are 2 1s in these, so the H = 2. For a group of codes, the Hamming Distance H, is decided by selecting the minimum of all Hamming Distances calculated from the Transmitted Code. Once the H of a group of bit patterns is known, we try to detect the error involved till there from Transmitted Code.
+
+By using this idea and theory of Hamming Code, we can use this concept for Error Detection.
+
+%-------------------------------------------------------------------------
+
+\subsection{Parity Check}
+This is one of the simplest error detection techniques. It appends a parity bit to the end of a block of data.
+The odd number of bit errors can be detected. If an even number of bits are inverted due to error, an undetected error occurs.
+
+This technique is also not 100\% reliable, as noise impulses are often too long enough to destroy more than 1 bit, particularly at high data rates.
+\textbf{Even Parity}
+So if our data has odd number of 1s we add 1 at the end to make even number of 1s in the data.
+Whereas if there are even number of 1s in the data, we simply add 0 at the end.
+\textbf{Odd Parity}
+So if our data has odd number of 1s we add 0 at the end to make odd number of 1s in the data.
+Whereas if there are odd number of 1s in the data, we simply add 0 at the end.
+
+\subsection{Checksum Testing}
+This is another way of checking for errors. This is a number calculated from the data and sent along with the data. If any errors occur during transmission, then checksum for the received data will differ from the transmitted data.
+
+A simple checksum technique is adding all the data. In general this is done for 16-bit long data. If the checksum turns out to be longer than 16-bit, then it only transmits the 16-bit.
+
+
+\subsection{Cyclic Redundancy Code} 
+This is essentially a more sophisticated type of checksum where it is extremely unlikely that any errors will go undetected. 
+
+The data is regarded as being one very long binary number. Place holder digits are added onto end and it is divided by a generator polynomial using modulo 2 division. The remainder at the end of this division is the CRC.
+
+\subsection{Cyclic Redundancy Check}
+When given a k- bit block of bits, the transmitter generates an n-bit sequence, known as the Frame Check Sequence (FCS), so that the resulting frame, consisting of k+n bits, is exactly divisible by some predetermined number. The receiver then divides the incoming frame by the number and, if there is no remainder, it is assumed that there was no error. 
+\end{document}
