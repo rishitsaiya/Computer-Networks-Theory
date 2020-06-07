@@ -8,10 +8,10 @@ Documentation to be added
     Packet Network Intercommunication & Congestion Avoidance and Control
 
 3. [Assignment-3](https://github.com/rishitsaiya/Computer-Networks-Theory/tree/master/Assignment-3)</br>
-    This consists of the Routing Algorithms & CIDR.
+    IP Address and CIDR, Distance Vector Routing and Link State Routing, 
 
 4. [Assignment-4](https://github.com/rishitsaiya/Computer-Networks-Theory/tree/master/Assignment-4)</br>
-    This consists of the Routing Algorithms & CIDR.
+    
 
 5. [Summary-1](https://github.com/rishitsaiya/Computer-Networks-Theory/tree/master/Summary-1)</br>
     This consists of the IP Addresses, Host ID and Network ID, Subnetting, Subnet Mask, Classful Internet Addressing, Upper and lower   limit of each IP class, Range of IP addresses in each class.
