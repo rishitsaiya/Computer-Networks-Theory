@@ -1,5 +1,5 @@
 # Computer-Networks-Theory
-Computer Networks Lab (CS 204), IIT Dharwad.
+This repo consists of all the theory assignments and the synopsis of the concepts covered in Computer Networks Course.
 
 1. [Assignment-1](https://github.com/rishitsaiya/Computer-Networks-Theory/tree/master/Assignment-1) </br>
     Virtual Circuit Network, Datagram Network, UDP, TCP, TDM, FDM, Requirement of Congestion Control.
